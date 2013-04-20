@@ -72,5 +72,10 @@ public class File {
 			reader = new BufferedReader(new FileReader(filename));
 		}
 	}
-
+	
+	
+	
+	public String toString() {
+		return "File: " + filename;
+	}
 }
