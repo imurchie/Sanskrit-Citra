@@ -22,9 +22,9 @@ public class Niyama implements CitraFigure {
 	private int type;
 	private int number;
 	
-	public static int PADA = 0;
-	public static int HALF = 1;
-	public static int VERSE = 2;
+	public static final int PADA = 0;
+	public static final int HALF = 1;
+	public static final int VERSE = 2;
 
 	/**
 	 * Creates the default situation, in which the entire verse is
@@ -55,20 +55,63 @@ public class Niyama implements CitraFigure {
 				Pada p = verse.getPada(i);
 				
 				ArrayList<String> c = p.getConsonants();
-				System.out.println(c.size() + ", " + getCount(c) + ": " + c);
+				//System.out.println(c.size() + ", " + getCount(c) + ": " + c);
 				if(getCount(c) > this.number) {
 					// we do not have a good enough restriction
 					return false;
 				}
 			}
 		} else if(this.type == Niyama.HALF) {
-			
+			// loop through all the padas
+			ArrayList<String> consonants = new ArrayList<String>(8);
+			for(int i=0; i<verse.length(); i++) {
+				Pada p = verse.getPada(i);
+				mergeUniques(consonants, p.getConsonants());
+				System.out.println(p);
+				System.out.println(consonants);
+				if(i==verse.length()/2-1) {
+					// first half done
+					if(getCount(consonants) > this.number) {
+						return false;
+					}
+					consonants = new ArrayList<String>(8);
+				} else if(i==verse.length()-1) {
+					// second half
+					if(getCount(consonants) > this.number) {
+						return false;
+					}
+				}
+			}
 		} else if(this.type == Niyama.VERSE) {
-			
+			// loop through all the padas
+			ArrayList<String> consonants = new ArrayList<String>(8);
+			for(int i=0; i<verse.length(); i++) {
+				Pada p = verse.getPada(i);
+				mergeUniques(consonants, p.getConsonants());
+			}
+			if(getCount(consonants) > this.number) {
+				return false;
+			}
 		}
 		
 		
 		return true;
+	}
+	
+	
+	/**
+	 * Takes two arrays and adds the elements from the second to the first, so that 
+	 * the elements are unique.
+	 * 
+	 * @param first
+	 * @param second
+	 */
+	private void mergeUniques(ArrayList<String> first, ArrayList<String> second) {
+		for(int i=0; i<second.size(); i++) {
+			if(first.indexOf(second.get(i)) == -1) {
+				first.add(second.get(i));
+			}
+		}
 	}
 	
 	
