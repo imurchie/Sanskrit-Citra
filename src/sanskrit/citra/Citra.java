@@ -3,6 +3,7 @@ package sanskrit.citra;
 import java.io.*;
 
 import sanskrit.citra.figure.CitraFigure;
+import sanskrit.citra.figure.FigureInfoException;
 import sanskrit.citra.figure.Niyama;
 
 
@@ -31,22 +32,6 @@ public class Citra {
 	 * @param args
 	 */
 	public static void main(String[] args) throws IOException {
-		//String id = "15.7";
-		//String[] padas = {"athāgre hasatā sāci", 
-		//                  "sthitena sthirakīrtinā /",
-		//                  "senānyā te jagadire",
-		//                  "kiṃcidāyastacetasā // BhKir_15.7 //"};
-		//Verse verse = new Verse(id, padas);
-		//System.out.println(verse);
-		//
-		//Verse verse2 = new Verse(padas);
-		//System.out.println(verse2);
-		//
-		//System.out.println("\n\n\nUsing File object...");
-		
-		// with a file
-		///*
-
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		
 		// query for file
@@ -58,8 +43,10 @@ public class Citra {
 			if(fname.isEmpty()) {
 				System.out.println("No file entered. Exiting...");
 				return;
+			} else if(fname.equalsIgnoreCase("quit")) {
+				return;
 			}
-			
+			System.out.println(fname.equalsIgnoreCase("quit"));
 			// we have a filename, which we need to try to find
 			// if not, loop through the directory tree
 			java.io.File file = findFile(fname, new java.io.File("./").listFiles());
@@ -79,56 +66,40 @@ public class Citra {
 			System.out.println("    (a) niyama");
 			
 			String fname = in.readLine();
-			if(fname.equals("a")) {
-				// this is a NIYAMA
-				// we also need more data
-				System.out.println("Choose the extent of restriction:");
-				System.out.println("    (a) quarter");
-				System.out.println("    (b) half");
-				System.out.println("    (c) verse");
 				
-				String ename = in.readLine();
-				int extent = Niyama.HALF;
-				if(ename.equals("a")) {
-					extent = Niyama.PADA;
-				} else if(ename.equals("b")) {
-					extent = Niyama.HALF;
-				} else if(ename.equals("c")) {
-					extent = Niyama.VERSE;
+			// get the object
+			try {
+				if(fname.equals("a")) {
+					// this is a NIYAMA
+					figure = Niyama.generateObject(in);
 				} else {
-					System.out.println("Invalid input \'" + ename + "\'");
-					continue;
+					System.out.println("Invalid choice.");
 				}
-			
-				System.out.print("Choose the number of syllables allowed: ");
-				int num = 0;
-				try {
-					num = Integer.parseInt(in.readLine());
-				} catch(NumberFormatException ex) {
-					System.out.println("Invalid input: " + ex);
-				}
-				
-				// we now have all the info we need
-				figure = new Niyama(extent, num);
+			} catch(IOException ex) {
+				// do something
+				System.out.println("Error creating niyama object: " + ex);
+			} catch(FigureInfoException ex) {
+				// do something else
+				System.out.println("Unable to create niyama object: " + ex);
+			}
+			if(figure != null) {
+				break;
 			}
 			
 			break;
 		}
 	    
 		
-		//String filename = "/Users/imurchie/Documents - Scholarly/GitHub/Eclipse/Sanskrit/src/sanskrit/citra/data/niyama_test.txt";
 		try {
+			System.out.println("\n\n*************************************");
+			System.out.println("File: " + filename);
 			File file = new File(filename);
 			Verse v = null;
 			while((v = file.getNextVerse()) != null) {
-				//System.out.println(v);
-				//Niyama n = null;//new Niyama(Niyama.PADA, 1);
-				//n = new Niyama(Niyama.HALF, 5);
-				//n = new Niyama(Niyama.VERSE, 5);
 				if(v.isFigure(figure)) {
-					System.out.println("Niyama! " + v);
+					System.out.println(figure.getFigureName() + "! " + v);
 				} else {
-					System.out.println("Not a niyama. " + v);
+					System.out.println("Not a " + figure.getFigureName() + ". " + v);
 				}
 			}
 		} catch(FileNotFoundException ex) {

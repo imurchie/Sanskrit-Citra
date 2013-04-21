@@ -1,5 +1,7 @@
 package sanskrit.citra.figure;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import sanskrit.citra.Pada;
@@ -18,7 +20,7 @@ import sanskrit.citra.Verse;
  * @author imurchie
  *
  */
-public class Niyama implements CitraFigure {
+public class Niyama extends CitraFigure {
 	private int type;
 	private int number;
 	
@@ -134,5 +136,46 @@ public class Niyama implements CitraFigure {
 		}
 		
 		return count;
+	}
+	
+	public boolean getRequiredInfo() throws FigureInfoException {
+		return false;
+	}
+	
+	/**
+	 * Override method from CitraFigure
+	 * @return
+	 * @throws FigureInfoException
+	 */
+	public static CitraFigure generateObject(BufferedReader in) throws FigureInfoException, IOException {
+		System.out.println("Choose the extent of restriction:");
+		System.out.println("    (a) quarter");
+		System.out.println("    (b) half");
+		System.out.println("    (c) verse");
+		
+		String ename = in.readLine();
+		int extent = Niyama.HALF;
+		if(ename.equals("a")) {
+			extent = Niyama.PADA;
+		} else if(ename.equals("b")) {
+			extent = Niyama.HALF;
+		} else if(ename.equals("c")) {
+			extent = Niyama.VERSE;
+		} else {
+			throw new FigureInfoException("Invalid input \'" + ename + "\'");
+		}
+	
+		System.out.print("Choose the number of syllables allowed: ");
+		int num = 0;
+		try {
+			num = Integer.parseInt(in.readLine());
+		} catch(NumberFormatException ex) {
+			throw new FigureInfoException("Invalid input: " + ex);
+		}
+		return new Niyama(extent, num);
+	}
+	
+	public String getFigureName() {
+		return "Niyama";
 	}
 }
