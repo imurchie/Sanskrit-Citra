@@ -10,20 +10,20 @@ import sanskrit.citra.Verse;
 
 /**
  * Niyama: gives tests for lipogrammatic verses
- * 
+ *
  * Can be:
  * 	PADA: individual restrictions in each verse quarter
  * 	HALF: individual restrictions in each half-verse
  * 	VERSE: the restriction applies to the entire verse
- * 
- * 
+ *
+ *
  * @author imurchie
  *
  */
 public class Niyama extends CitraFigure {
 	private int type;
 	private int number;
-	
+
 	public static final int PADA = 0;
 	public static final int HALF = 1;
 	public static final int VERSE = 2;
@@ -36,7 +36,7 @@ public class Niyama extends CitraFigure {
 		this.type = Niyama.VERSE;
 		this.number = 1;
 	}
-	
+
 	public Niyama(int type, int number) {
 		this.type = type;
 		this.number = number;
@@ -51,11 +51,11 @@ public class Niyama extends CitraFigure {
 		//ArrayList<String> c = p.getConsonants();
 		//System.out.println(p);
 		//System.out.println(c);
-		
+
 		if(this.type == Niyama.PADA) {
 			for(int i=0; i<verse.length(); i++) {
 				Pada p = verse.getPada(i);
-				
+
 				ArrayList<String> c = p.getConsonants();
 				//System.out.println(c.size() + ", " + getCount(c) + ": " + c);
 				if(getCount(c) > this.number) {
@@ -95,16 +95,16 @@ public class Niyama extends CitraFigure {
 				return false;
 			}
 		}
-		
-		
+
+
 		return true;
 	}
-	
-	
+
+
 	/**
-	 * Takes two arrays and adds the elements from the second to the first, so that 
+	 * Takes two arrays and adds the elements from the second to the first, so that
 	 * the elements are unique.
-	 * 
+	 *
 	 * @param first
 	 * @param second
 	 */
@@ -115,14 +115,14 @@ public class Niyama extends CitraFigure {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * This is necessary because there are exceptions to the restriction
-	 * 
+	 *
 	 * - anusvāra and visarga are not counted, nor are avagraha
 	 * - final consonants are also exempt (because of sandhi, mostly)
-	 * 
+	 *
 	 * @param c
 	 * @return
 	 */
@@ -134,14 +134,14 @@ public class Niyama extends CitraFigure {
 				count++;
 			}
 		}
-		
+
 		return count;
 	}
-	
+
 	public boolean getRequiredInfo() throws FigureInfoException {
 		return false;
 	}
-	
+
 	/**
 	 * Override method from CitraFigure
 	 * @return
@@ -152,7 +152,7 @@ public class Niyama extends CitraFigure {
 		System.out.println("    (a) quarter");
 		System.out.println("    (b) half");
 		System.out.println("    (c) verse");
-		
+
 		String ename = in.readLine();
 		int extent = Niyama.HALF;
 		if(ename.equals("a")) {
@@ -164,7 +164,7 @@ public class Niyama extends CitraFigure {
 		} else {
 			throw new FigureInfoException("Invalid input \'" + ename + "\'");
 		}
-	
+
 		System.out.print("Choose the number of syllables allowed: ");
 		int num = 0;
 		try {
@@ -174,7 +174,7 @@ public class Niyama extends CitraFigure {
 		}
 		return new Niyama(extent, num);
 	}
-	
+
 	public String getFigureName() {
 		return "Niyama";
 	}

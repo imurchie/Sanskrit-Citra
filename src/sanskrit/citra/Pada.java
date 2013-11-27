@@ -11,16 +11,16 @@ public class Pada {
 		this.id = id;
 		this.syllables = syllables;
 	}
-	
-	
+
+
 	public int length() {
 		return syllables.size();
 	}
-	
+
 	public String getSyllable(int index) {
 		return syllables.get(index);
 	}
-	
+
 	/**
 	 * Returns a list of the unique consonants in a particular Pada.
 	 * @param pada
@@ -29,10 +29,10 @@ public class Pada {
 	public ArrayList<String> getConsonants() {
 		// need a flexible array, since we do not know the number of consonants a priori
 		ArrayList<String> consonants = new ArrayList<String>(syllables.size());
-		
+
 		for(int i=0; i<syllables.size(); i++) {
 			char[] syllable = syllables.get(i).toCharArray();
-			
+
 			String consonant = null; // buffer
 			for(int j=0; j<syllable.length; j++) {
 				char character = syllable[j];
@@ -55,7 +55,7 @@ public class Pada {
 					} else {
 						consonant = String.valueOf(character);
 					}
-					
+
 				}
 			}
 			// if there is a final consonant, it will still be in the buffer
@@ -63,10 +63,10 @@ public class Pada {
 				consonants.add(consonant);
 			}
 		}
-		
+
 		return consonants;
 	}
-	
+
 	private boolean isVowel(char letter) {
 		return letter == 'a'
 				|| letter == 'ā'
@@ -83,8 +83,8 @@ public class Pada {
 	}
 
 
-	
-	
+
+
 
 	@Override
 	public String toString() {

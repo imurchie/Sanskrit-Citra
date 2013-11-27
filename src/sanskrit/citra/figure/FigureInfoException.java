@@ -3,8 +3,8 @@ package sanskrit.citra.figure;
 
 /**
  * Exception thrown by implementors of CitraFigure interface.
- * 
- * 
+ *
+ *
  * @author imurchie
  */
 
